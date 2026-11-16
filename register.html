@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>የጾም ምዝገባ · Galmee Soomaa</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --crimson:  #7A1F2B;
+    --crimson2: #9B2535;
+    --gold:     #B8892B;
+    --gold-lt:  #E7C873;
+    --bg:       #F7F3EF;
+    --card:     #FFFFFF;
+    --text:     #1E2430;
+    --muted:    #6B7280;
+    --border:   #E2D9CF;
+    --focus:    #E7C873;
+    --radius:   14px;
+    --shadow:   0 4px 24px rgba(122,31,43,.10);
+  }
+
+  body {
+    font-family: 'Inter', 'Noto Sans Ethiopic', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .topbar {
+    background: linear-gradient(135deg, var(--crimson) 0%, #4A0F18 100%);
+    padding: .75rem 1.25rem .75rem;
+    color: #fff;
+    text-align: center;
+    position: relative;
+  }
+  .topbar-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .6rem;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: .35rem;
+    padding: .38rem .9rem;
+    border-radius: 8px;
+    background: rgba(255,255,255,.12);
+    border: 1.5px solid rgba(255,255,255,.35);
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 700;
+    text-decoration: none;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+    white-space: nowrap;
+  }
+  .back-link:hover { background: rgba(255,255,255,.25); border-color: rgba(255,255,255,.65); }
+  .back-link:active { transform: scale(.97); }
+  .lang-group { display: flex; gap: .4rem; }
+  .lang-btn {
+    padding: .3rem .85rem;
+    border-radius: 100px;
+    border: 1.5px solid rgba(255,255,255,.45);
+    background: transparent;
+    color: rgba(255,255,255,.8);
+    font-size: .78rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .lang-btn.active, .lang-btn:hover { background: rgba(255,255,255,.22); color: #fff; border-color: rgba(255,255,255,.75); }
+  .topbar-title { font-size: clamp(1.1rem, 3.5vw, 1.5rem); font-weight: 800; letter-spacing: -.01em; }
+  .topbar-sub { margin-top: .2rem; opacity: .82; font-size: .82rem; }
+
+  .card-wrap { max-width: 540px; margin: 1.25rem auto 2.5rem; padding: 0 1rem; }
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1.5px solid var(--border); padding: 1.75rem 1.5rem; }
+
+  .field-wrap { margin-bottom: 1.1rem; }
+  .field-label { display: block; font-size: .88rem; font-weight: 600; margin-bottom: .4rem; color: var(--text); }
+  .field {
+    width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+    padding: .7rem .9rem; background: #fff; font-size: .95rem; font-family: inherit;
+    color: var(--text); transition: border-color .15s, box-shadow .15s; -webkit-appearance: none;
+  }
+  .field:focus { outline: none; border-color: var(--crimson); box-shadow: 0 0 0 3px rgba(231,200,115,.45); }
+  select.field { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .75rem center; padding-right: 2.5rem; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 420px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .choice-label { display: block; border: 2px solid var(--border); border-radius: var(--radius); padding: 1rem 1.1rem; cursor: pointer; transition: border-color .15s, background .15s; margin-bottom: .75rem; }
+  .choice-label:last-child { margin-bottom: 0; }
+  .choice-label:has(input:checked) { border-color: var(--crimson); background: #FBF1F2; }
+  .choice-label:has(input:focus-visible) { box-shadow: 0 0 0 3px rgba(231,200,115,.45); }
+  .choice-top { display: flex; align-items: center; gap: .6rem; }
+  .choice-top input[type="radio"] { accent-color: var(--crimson); width: 17px; height: 17px; flex-shrink: 0; }
+  .choice-title { font-weight: 700; font-size: .95rem; }
+  .choice-desc { margin-top: .4rem; font-size: .83rem; color: var(--muted); line-height: 1.55; padding-left: 1.6rem; }
+
+  .consent-label { display: flex; gap: .7rem; align-items: flex-start; font-size: .85rem; color: var(--muted); line-height: 1.5; cursor: pointer; }
+  .consent-label input { accent-color: var(--crimson); margin-top: .15rem; flex-shrink: 0; }
+
+  .alert { display: none; border-radius: 10px; padding: .75rem 1rem; font-size: .88rem; margin-bottom: 1rem; line-height: 1.5; }
+  .alert.error   { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
+  .alert.info    { background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; }
+  .alert.loading { background: #F8FAFC; color: var(--muted); border: 1px solid var(--border); }
+  .alert.show    { display: block; }
+
+  .btn-submit { width: 100%; background: var(--crimson); color: #fff; border: none; border-radius: 12px; padding: .9rem; font-size: 1rem; font-weight: 700; font-family: inherit; cursor: pointer; transition: background .15s, transform .1s; letter-spacing: .01em; }
+  .btn-submit:hover  { background: var(--crimson2); }
+  .btn-submit:active { transform: scale(.98); }
+  .btn-submit:disabled { opacity: .55; cursor: not-allowed; }
+
+  .success-screen { display: none; text-align: center; padding: 3rem 1.5rem; }
+  .success-screen.show { display: block; }
+  .success-icon { font-size: 4rem; color: var(--gold); filter: drop-shadow(0 2px 8px rgba(184,137,43,.35)); margin-bottom: 1rem; }
+  .success-screen h2 { font-size: 1.4rem; font-weight: 800; color: var(--crimson); margin-bottom: .5rem; }
+  .success-screen p { color: var(--muted); line-height: 1.6; }
+
+  .section-title { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: .75rem; padding-bottom: .5rem; border-bottom: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-nav">
+    <a href="index.html" class="back-link">🏠 <span data-i="back"></span></a>
+    <div class="lang-group" role="group" aria-label="Language">
+      <button data-lang="am" class="lang-btn">አማርኛ</button>
+      <button data-lang="ao" class="lang-btn">Afaan Oromoo</button>
+    </div>
+  </div>
+  <div class="topbar-title" data-i="title"></div>
+  <div class="topbar-sub"   data-i="sub"></div>
+</div>
+
+<div class="card-wrap">
+  <div class="card">
+    <form id="f" novalidate>
+      <p class="section-title" data-i="secPersonal"></p>
+      <div class="field-wrap">
+        <label class="field-label" data-i="name"></label>
+        <input name="name" class="field" required autocomplete="name">
+      </div>
+      <div class="field-wrap">
+        <label class="field-label" data-i="sid"></label>
+        <input name="studentId" class="field" required maxlength="20" autocapitalize="characters" autocomplete="off" placeholder="NSR/…/…  |  SSR/…/…">
+      </div>
+      <div class="grid2">
+        <div class="field-wrap">
+          <label class="field-label" data-i="dept"></label>
+          <input name="department" class="field" required>
+        </div>
+        <div class="field-wrap">
+          <label class="field-label" data-i="year"></label>
+          <select name="year" class="field" required id="yr"></select>
+        </div>
+      </div>
+      <div class="field-wrap">
+        <label class="field-label" data-i="phone"></label>
+        <input name="phone" type="tel" class="field" required inputmode="tel" autocomplete="tel" placeholder="09…" pattern="^\+?[\d\s\-()]{7,15}$">
+      </div>
+      <p class="section-title" data-i="secFast"></p>
+      <fieldset style="border:none;padding:0;margin-bottom:1.1rem;">
+        <legend class="field-label" data-i="group"></legend>
+        <label class="choice-label">
+          <div class="choice-top">
+            <input type="radio" name="group" value="A" required>
+            <span class="choice-title" data-i="aT"></span>
+          </div>
+          <div class="choice-desc" data-i="aD"></div>
+        </label>
+        <label class="choice-label">
+          <div class="choice-top">
+            <input type="radio" name="group" value="B">
+            <span class="choice-title" data-i="bT"></span>
+          </div>
+          <div class="choice-desc" data-i="bD"></div>
+        </label>
+      </fieldset>
+      <div class="field-wrap">
+        <label class="field-label" data-i="note"></label>
+        <textarea name="note" rows="2" class="field" style="resize:vertical;"></textarea>
+      </div>
+      <div class="field-wrap">
+        <label class="consent-label">
+          <input type="checkbox" name="consent" required>
+          <span data-i="consent"></span>
+        </label>
+      </div>
+      <div id="msg" class="alert"></div>
+      <button id="btn" type="submit" class="btn-submit" data-i="send"></button>
+    </form>
+    <div id="ok" class="success-screen">
+      <div class="success-icon">✝</div>
+      <h2 data-i="okT"></h2>
+      <p data-i="okD"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbxw8sbZFwx8R3CcazGsGqpQKkmbDLngj9PxKfoMLoUhSw5k9trIdyYX8o4bJxqMW2rg/exec";
+
+const T = {
+  am: {
+    back:"መነሻ ገጽ",
+    title:"የጾም ምዝገባ", sub:"ደምቢዶሎ ዩኒቨርሲቲ",
+    secPersonal:"የግል መረጃ", secFast:"የጾም አይነት",
+    name:"ሙሉ ስም", sid:"የተማሪ መታወቂያ ቁጥር",
+    dept:"ዲፓርትመንት", year:"የትምህርት ዓመት",
+    yearO:["ሬሜዲያል","1","2","3","4","5","ከ5 በላይ (Medicine)"],
+    phone:"ስልክ ቁጥር",
+    group:"የጾም አይነት ይምረጡ",
+    aT:"ሙሉ ጾም", aD:"ከሰኞ እስከ አርብ ቁርስ መተው፤ እሁድና ሐሙስ ማታ ከስጋ ነጻ የሆነ ምግብ መመገብ።",
+    bT:"ከስጋ መከልከል ብቻ", bD:"እሁድና ሐሙስ ማታ ከስጋ ነጻ የሆነ ምግብ መመገብ።",
+    note:"ማስታወሻ (አማራጭ)", consent:"መረጃዬ ለጾም ማስተባበሪያ ብቻ እንዲውል እስማማለሁ።",
+    send:"ምዝገባዬን ላክ",
+    okT:"ምዝገባዎ ተቀብሏል", okD:"እግዚአብሔር ጾማችሁን ይቀበል።",
+    miss:"እባክዎ ሁሉንም አስፈላጊ ቦታዎች ይሙሉ።",
+    idfmt:"የተማሪ መታወቂያ ቁጥር በዚህ መልክ ያስገቡ፦ NSR/…/… ወይም SSR/…/…",
+    phonefmt:"ትክክለኛ የስልክ ቁጥር ያስገቡ (ለምሳሌ፦ 0912345678)",
+    dup:"ይህ የተማሪ መታወቂያ ቁጥር አስቀድሞ ተመዝግቧል። ሁለት ጊዜ መመዝገብ አይቻልም።",
+    fail:"መላክ አልተቻለም። ኢንተርኔትዎን አረጋግጠው እንደገና ይሞክሩ።",
+    sending:"በመላክ ላይ…"
+  },
+  ao: {
+    back:"Fuula Darbeef",
+    title:"Galmee Soomaa", sub:"Dembi Dollo University",
+    secPersonal:"Odeeffannoo dhuunfaa", secFast:"Gosa soomaa",
+    name:"Maqaa guutuu", sid:"Lakkoofsa eenyummaa barataa",
+    dept:"Department", year:"Bara barnootaa",
+    yearO:["Remedial","1","2","3","4","5","5 Ol (Medicine)"],
+    phone:"Lakkoofsa bilbilaa",
+    group:"Gosa soomaa filadhu",
+    aT:"Soomaa guutuu", aD:"Wiixataa hanga Jimaataatti ciree dhiisuu; Dilbataa fii Kamisa galgala nyaata foon hin qabne nyaachuu.",
+    bT:"Foon dhiisuu qofa", bD:"Dilbataa fi Kamisa galgala nyaata foon hin qabne nyaachuu.",
+    note:"Yaada (filannoo)", consent:"Odeeffannoon koo soomaaf haala mijeessuu qofaaf akka oolu nan eyyama.",
+    send:"Galmee koo ergi",
+    okT:"Galmeen keessan fudhatameera", okD:"Waaqayyo soomaa keessan haa fudhatu!",
+    miss:"Maaloo iddoowwan barbaachisoo hundaa guutaa!",
+    idfmt:"Lakkoofsa eenyummaa akkasitti galchaa: NSR/…/… yookiin SSR/…/…",
+    phonefmt:"Lakkoofsa bilbilaa sirrii galchi (fakkeenyaaf: 0912345678)",
+    dup:"Lakkoofsi eenyummaa kun duraan galmaa'eera. Altokko lama galmaa'uun hin danda'amu.",
+    fail:"Ergamuu hin dandeenye. Interneetii keessan mirkaneeffadhaatii irra deebi'aa yaalaa.",
+    sending:"Ergaa jira…"
+  }
+};
+
+const YEARS = ["Remedial","1","2","3","4","5","Above 5"];
+const ID_OK = /^(NSR|SSR)\/\d+\/\d+$/;
+const $ = s => document.querySelector(s);
+let lang = localStorage.getItem("lang") || "am";
+if (lang === "om") lang = "ao";
+
+function setLang(l) {
+  lang = l;
+  try { localStorage.setItem("lang", l); } catch(e){}
+  const t = T[l] || T.am;
+  document.documentElement.lang = l === "am" ? "am" : "om";
+  document.querySelectorAll("[data-i]").forEach(el => el.textContent = t[el.dataset.i] || "");
+  const yr = $("#yr"), cur = yr.value;
+  yr.innerHTML = '<option value="">–</option>' + YEARS.map((v,i) => `<option value="${v}">${t.yearO[i]}</option>`).join("");
+  yr.value = cur;
+  document.querySelectorAll(".lang-btn").forEach(b => b.classList.toggle("active", b.dataset.lang === l));
+}
+document.querySelectorAll(".lang-btn").forEach(b => b.onclick = () => setLang(b.dataset.lang));
+setLang(lang);
+
+function showMsg(text, type) { const m = $("#msg"); m.textContent = text; m.className = "alert show " + type; }
+function hideMsg() { $("#msg").className = "alert"; }
+
+$("#f").studentId.addEventListener("input", e => { e.target.value = e.target.value.toUpperCase().replace(/\s+/g, ""); });
+
+$("#f").addEventListener("submit", async e => {
+  e.preventDefault();
+  const f = e.target, t = T[lang];
+  if (!f.checkValidity()) { f.reportValidity(); return showMsg(t.miss, "error"); }
+  if (!ID_OK.test(f.studentId.value)) { f.studentId.focus(); return showMsg(t.idfmt, "error"); }
+  const PHONE_OK = /^\+?[\d\s\-()\u0030-\u0039]{7,15}$/;
+  if (!PHONE_OK.test(f.phone.value)) { f.phone.focus(); return showMsg(t.phonefmt, "error"); }
+  const d = Object.fromEntries(new FormData(f));
+  delete d.consent;
+  d.lang = lang;
+  const btn = $("#btn"); btn.disabled = true;
+  showMsg(t.sending, "loading");
+  try {
+    const r = await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(d) });
+    const j = await r.json();
+    if (!j.ok) {
+      if (j.error === "duplicate")   return showMsg(t.dup,      "error");
+      if (j.error === "idformat")    return showMsg(t.idfmt,    "error");
+      if (j.error === "phoneformat") return showMsg(t.phonefmt, "error");
+      throw new Error(j.error);
+    }
+    f.style.display = "none"; hideMsg();
+    $("#ok").classList.add("show");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } catch (err) { showMsg(t.fail, "error"); }
+  btn.disabled = false;
+});
+</script>
+</body>
+</html>

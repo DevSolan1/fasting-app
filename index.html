@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>የጾም ምዝገባ · Galmee Soomaa</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --crimson:  #7A1F2B;
+    --crimson2: #9B2535;
+    --gold:     #B8892B;
+    --gold-lt:  #E7C873;
+    --bg:       #F7F3EF;
+    --card:     #FFFFFF;
+    --text:     #1E2430;
+    --muted:    #6B7280;
+    --border:   #E2D9CF;
+    --radius:   16px;
+    --shadow:   0 4px 24px rgba(122,31,43,.10);
+  }
+
+  body {
+    font-family: 'Inter', 'Noto Sans Ethiopic', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOP NAV ── */
+  .topnav {
+    background: linear-gradient(135deg, var(--crimson) 0%, #4A0F18 100%);
+    padding: .7rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    flex-wrap: wrap;
+    position: relative;
+    overflow: hidden;
+  }
+  .topnav::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .nav-brand {
+    display: flex; align-items: center; gap: .55rem; color: #fff; z-index: 1;
+  }
+  .nav-cross { font-size: 1.3rem; }
+  .nav-title { font-size: 1rem; font-weight: 800; letter-spacing: -.01em; }
+  .nav-sub   { font-size: .72rem; opacity: .75; }
+
+  .nav-right {
+    display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; z-index: 1;
+  }
+
+  .lang-btn {
+    padding: .28rem .78rem;
+    border-radius: 100px;
+    border: 1.5px solid rgba(255,255,255,.4);
+    background: transparent;
+    color: rgba(255,255,255,.8);
+    font-size: .75rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background .15s, color .15s, border-color .15s;
+    white-space: nowrap;
+  }
+  .lang-btn.active, .lang-btn:hover {
+    background: rgba(255,255,255,.22);
+    color: #fff;
+    border-color: rgba(255,255,255,.75);
+  }
+
+  .nav-admin-btn {
+    display: inline-flex; align-items: center; gap: .35rem;
+    padding: .38rem 1rem;
+    border-radius: 8px;
+    background: rgba(255,255,255,.12);
+    border: 1.5px solid rgba(255,255,255,.35);
+    color: #fff;
+    font-size: .78rem;
+    font-weight: 700;
+    text-decoration: none;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+    white-space: nowrap;
+  }
+  .nav-admin-btn:hover {
+    background: rgba(255,255,255,.25);
+    border-color: rgba(255,255,255,.65);
+  }
+  .nav-divider {
+    width: 1px; height: 18px;
+    background: rgba(255,255,255,.25);
+  }
+
+  /* ── MAIN ── */
+  .main {
+    flex: 1;
+    max-width: 760px;
+    width: 100%;
+    margin: 1.5rem auto 2.5rem;
+    padding: 0 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  /* ── CTA CARD ── */
+  .cta-card {
+    background: linear-gradient(135deg, var(--crimson) 0%, var(--crimson2) 100%);
+    border-radius: var(--radius);
+    padding: 1.75rem 1.75rem 1.5rem;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 0 8px 32px rgba(122,31,43,.25);
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-card::after {
+    content: '✝';
+    position: absolute;
+    right: 1.5rem; top: 50%;
+    transform: translateY(-50%);
+    font-size: 5rem;
+    opacity: .07;
+    pointer-events: none;
+    line-height: 1;
+  }
+  .cta-label {
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    opacity: .75;
+  }
+  .cta-title {
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -.01em;
+  }
+  .cta-desc {
+    font-size: .9rem;
+    opacity: .88;
+    line-height: 1.6;
+    max-width: 480px;
+  }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: .5rem;
+    align-self: flex-start;
+    padding: .75rem 1.75rem;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--crimson);
+    font-size: .95rem;
+    font-weight: 800;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background .15s, transform .1s, box-shadow .15s;
+    box-shadow: 0 2px 12px rgba(0,0,0,.15);
+    letter-spacing: -.01em;
+  }
+  .cta-btn:hover  { background: #f8e8ea; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,.18); }
+  .cta-btn:active { transform: scale(.97); }
+  .cta-arrow { font-size: 1.1rem; transition: transform .15s; }
+  .cta-btn:hover .cta-arrow { transform: translateX(3px); }
+
+  /* ── BIBLE CARD ── */
+  .bible-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .bible-header {
+    background: linear-gradient(135deg, #FEF9EC 0%, #FDF3D0 100%);
+    border-bottom: 1.5px solid #F0DFA0;
+    padding: .9rem 1.4rem;
+    display: flex; align-items: center; gap: .6rem;
+  }
+  .bible-header-icon  { font-size: 1.3rem; }
+  .bible-header-title {
+    font-size: .82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--gold);
+  }
+  .bible-body { padding: 1.4rem 1.4rem 1.6rem; }
+  .bible-verse {
+    font-size: 1.05rem;
+    font-style: italic;
+    line-height: 1.75;
+    color: var(--text);
+    margin-bottom: .85rem;
+    border-left: 4px solid var(--gold-lt);
+    padding-left: 1rem;
+    font-family: 'Noto Sans Ethiopic', 'Inter', serif;
+  }
+  .bible-ref {
+    font-size: .8rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: .03em;
+  }
+  .bible-teaching {
+    margin-top: 1rem;
+    font-size: .9rem;
+    line-height: 1.75;
+    color: #374151;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 1.1rem;
+    font-size: .78rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="nav-brand">
+    <span class="nav-cross">✝</span>
+    <div>
+      <div class="nav-title" data-i="navTitle"></div>
+      <div class="nav-sub"   data-i="navSub"></div>
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="lang-btn" data-lang="am">አማርኛ</button>
+    <button class="lang-btn" data-lang="ao">Afaan Oromoo</button>
+    <div class="nav-divider"></div>
+    <a href="admin.html" class="nav-admin-btn">🔐 <span data-i="adminNav"></span></a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- CTA -->
+  <div class="cta-card">
+    <div class="cta-label" data-i="ctaLabel"></div>
+    <div class="cta-title" data-i="ctaTitle"></div>
+    <div class="cta-desc"  data-i="ctaDesc"></div>
+    <a href="register.html" class="cta-btn">
+      <span data-i="ctaBtn"></span>
+      <span class="cta-arrow">→</span>
+    </a>
+  </div>
+
+  <!-- Bible Teaching -->
+  <div class="bible-card">
+    <div class="bible-header">
+      <span class="bible-header-icon">📖</span>
+      <span class="bible-header-title" data-i="bibleLabel"></span>
+    </div>
+    <div class="bible-body">
+      <div class="bible-verse"    data-i="bibleVerse"></div>
+      <div class="bible-ref"      data-i="bibleRef"></div>
+      <div class="bible-teaching" data-i="bibleTeaching"></div>
+    </div>
+  </div>
+
+</div>
+
+<footer data-i="footer"></footer>
+
+<script>
+const T = {
+  am: {
+    navTitle:     "የጾም ምዝገባ",
+    navSub:       "ደምቢዶሎ ዩኒቨርሲቲ",
+    adminNav:     "Admin",
+    
+    ctaTitle:     "በስመ አብ ወወልድ ወመንፈስ ቅዱስ አሐዱ አምላክ አሜን።🙏❤️",
+    ctaDesc:      "በጾሙ ለመሳተፍ ስምዎን፣ የተማሪ መታወቂያ ቁጥርዎን እና ሌሎች ሐሳቦትዎን ይሙሉ። ምዝገባው ቀላልና ፈጣን ነው።",
+    ctaBtn:       "ለመመዝገብ  እዚህ ንኩ!",
+    bibleLabel:   "የመጽሐፍ ቅዱስ ትምህርት",
+    bibleVerse:   "«አሁንስ፥ ይላል እግዚአብሔር፥ በፍጹም ልባችሁ፥ በጾምም፥ በልቅሶና በዋይታ ወደ እኔ ተመለሱ።»",
+    bibleRef:     "— ኢዩኤል 2፥12",
+    bibleTeaching:"ስትጦሙም፥እንደ ግብዞች አትጠውልጉ ለሰዎች እንደ ጦመኛ ሊታዩ ፊታቸውን ያጠፋሉና እውነት እላችኋለሁ፥ዋጋቸውን ተቀብለዋል። — ማቴዎስ 6፥16",
+    footer:       "© ደምቢዶሎ ዩኒቨርሲቲ · የጾም ምዝገባ"
+  },
+  ao: {
+    navTitle:     "Galmee Soomaa",
+    navSub:       "Dembi Dollo University",
+    adminNav:     "Admin",
+  
+    ctaTitle:     "Maqaa Abbaa Kan Ilmaa Kan Hafuura Qulqulluu Waaqa Tokko! Ameen!🙏❤️ ",
+    ctaDesc:      "Sooma Kanatti Hirmaachuuf maqaa keessan, lakkoofsa ID barataa fi odeeffannoo barbaachisoo biroo guutaa. Galmaahuun salphaa fi ariifataa dha!",
+    ctaBtn:       "Galmaahuuf As Tuqaa!",
+    bibleLabel:   "Barsiisa Macaafa Qulqulluu",
+    bibleVerse:   "«Waaqayyo garuu, ''Ammuma iyyuu garaa keessan guutuudhaan, soomuudhaan, boo'ichaan, gadduudhaanis gara kootti deebi'aa!'' jedha.»",
+    bibleRef:     " — Yoe. 2:12",
+    bibleTeaching:"«Ati garuu yeroodhuma soomtutti, mataa kee dibadhu, fuula kee dhiqadhu! Soomuun kee abbaa kee isa wanta dhoksaatti hojjetamu hundumaa argutti malee, namota duratti akka hin mullanne godhi! Abbaan kee inni wanta dhoksaatti hojjetamu hundumaa argu immoo gatii siif in kenna. — Maat. 6:17–18»",
+    footer:       "© Dembi Dollo University · Galmee Soomaa"
+  }
+};
+
+const $ = s => document.querySelector(s);
+let lang = localStorage.getItem("lang") || "am";
+if (lang === "om") lang = "ao";
+
+function applyLang(l) {
+  lang = l;
+  try { localStorage.setItem("lang", l); } catch(e) {}
+  const t = T[l] || T.am;
+  document.querySelectorAll("[data-i]").forEach(el => el.textContent = t[el.dataset.i] || "");
+  document.querySelectorAll(".lang-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.lang === l);
+  });
+  document.documentElement.lang = l === "am" ? "am" : "om";
+}
+document.querySelectorAll(".lang-btn").forEach(b => b.onclick = () => applyLang(b.dataset.lang));
+applyLang(lang);
+</script>
+</body>
+</html>

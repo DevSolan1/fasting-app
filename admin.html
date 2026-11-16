@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin · Fasting Registrations</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --crimson:  #7A1F2B;
+    --crimson2: #9B2535;
+    --gold:     #B8892B;
+    --gold-lt:  #E7C873;
+    --bg:       #F7F3EF;
+    --card:     #FFFFFF;
+    --text:     #1E2430;
+    --muted:    #6B7280;
+    --border:   #E2D9CF;
+    --radius:   14px;
+    --shadow:   0 4px 24px rgba(122,31,43,.10);
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: linear-gradient(135deg, var(--crimson) 0%, #4A0F18 100%);
+    padding: 1.25rem 1.5rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .topbar-left { display: flex; align-items: center; gap: .75rem; }
+  .topbar-logo { font-size: 1.5rem; }
+  .topbar-title { font-size: 1.1rem; font-weight: 800; }
+  .topbar-sub   { font-size: .78rem; opacity: .75; }
+  .back-link {
+    display: inline-flex; align-items: center; gap: .35rem;
+    padding: .38rem .9rem;
+    border-radius: 8px;
+    background: rgba(255,255,255,.12);
+    border: 1.5px solid rgba(255,255,255,.35);
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 700;
+    text-decoration: none;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+    white-space: nowrap;
+  }
+  .back-link:hover {
+    background: rgba(255,255,255,.25);
+    border-color: rgba(255,255,255,.65);
+  }
+  .back-link:active { transform: scale(.97); }
+
+  /* ── MAIN LAYOUT ── */
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1.5px solid var(--border);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1.1rem;
+    color: var(--crimson);
+    display: flex; align-items: center; gap: .4rem;
+  }
+
+  /* ── LOGIN FORM ── */
+  .login-wrap {
+    max-width: 400px;
+    margin: 2.5rem auto 0;
+  }
+  .login-wrap .card { text-align: center; padding: 2rem 1.75rem; }
+  .login-icon { font-size: 2.8rem; margin-bottom: .75rem; }
+  .login-wrap h2 { font-size: 1.3rem; font-weight: 800; color: var(--crimson); margin-bottom: .4rem; }
+  .login-wrap p  { font-size: .88rem; color: var(--muted); margin-bottom: 1.5rem; }
+
+  .field {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: .7rem .9rem;
+    background: #fff;
+    font-size: .95rem;
+    font-family: inherit;
+    color: var(--text);
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--crimson);
+    box-shadow: 0 0 0 3px rgba(231,200,115,.4);
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
+    padding: .65rem 1.4rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: .9rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .15s, color .15s, transform .1s;
+    border: 2px solid transparent;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .btn-primary { background: var(--crimson); color: #fff; border-color: var(--crimson); }
+  .btn-primary:hover:not(:disabled) { background: var(--crimson2); border-color: var(--crimson2); }
+  .btn-outline { background: transparent; color: var(--crimson); border-color: var(--crimson); }
+  .btn-outline:hover:not(:disabled) { background: var(--crimson); color: #fff; }
+  .btn-ghost  { background: transparent; color: var(--muted); border-color: var(--border); }
+  .btn-ghost:hover { background: var(--border); color: var(--text); }
+  .btn-gold   { background: transparent; color: var(--gold); border-color: var(--gold); }
+  .btn-gold:hover { background: var(--gold); color: #fff; }
+  .btn-full { width: 100%; }
+
+  /* ── ALERT ── */
+  .alert {
+    display: none;
+    border-radius: 9px;
+    padding: .65rem .9rem;
+    font-size: .86rem;
+    margin-top: .75rem;
+    line-height: 1.5;
+  }
+  .alert.show   { display: block; }
+  .alert.error  { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
+  .alert.success{ background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; }
+
+  /* ── STAT CARDS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .9rem;
+    margin-bottom: 1.25rem;
+  }
+  @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
+  .stat-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.1rem;
+    box-shadow: var(--shadow);
+  }
+  .stat-label { font-size: .78rem; color: var(--muted); margin-bottom: .3rem; font-weight: 600; }
+  .stat-val   { font-size: 2rem; font-weight: 800; color: var(--crimson); line-height: 1; }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+    margin-bottom: 1rem;
+    align-items: center;
+  }
+  .filter-bar .field { flex: 1; min-width: 160px; }
+  .filter-bar select.field { flex: 0 0 auto; width: auto; min-width: 130px; cursor: pointer; }
+
+  /* ── TABLE ── */
+  .table-outer {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+  thead tr { background: #F7F3EF; }
+  th {
+    padding: .75rem .85rem;
+    text-align: left;
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--muted);
+    white-space: nowrap;
+    border-bottom: 1.5px solid var(--border);
+  }
+  td {
+    padding: .7rem .85rem;
+    border-bottom: 1px solid #F3EDE7;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #FDFAF7; }
+  .badge {
+    display: inline-block;
+    padding: .2rem .6rem;
+    border-radius: 100px;
+    font-size: .75rem;
+    font-weight: 700;
+  }
+  .badge-a { background: #FBF1F2; color: var(--crimson); }
+  .badge-b { background: #FEF9EC; color: var(--gold); }
+  .badge-ao { background: #EEF2FF; color: #4338CA; }
+  .badge-am { background: #F0FDF4; color: #166534; }
+  .del-btn {
+    color: #DC2626;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: .82rem;
+    font-weight: 600;
+    padding: .2rem .5rem;
+    border-radius: 6px;
+    transition: background .15s;
+    font-family: inherit;
+  }
+  .del-btn:hover { background: #FEF2F2; }
+  .empty-row td {
+    text-align: center;
+    color: var(--muted);
+    padding: 2.5rem;
+    font-size: .9rem;
+  }
+
+  /* ── CHANGE PASSWORD ── */
+  details summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 700;
+    font-size: .9rem;
+    color: var(--crimson);
+    user-select: none;
+    padding: .1rem 0;
+  }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::after {
+    content: '▸';
+    margin-left: auto;
+    transition: transform .2s;
+    color: var(--muted);
+    font-size: .75rem;
+  }
+  details[open] summary::after { transform: rotate(90deg); }
+  .chpw-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .7rem;
+    margin-top: 1rem;
+  }
+  .chpw-form .field { flex: 1; min-width: 180px; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-logo">🔐</span>
+    <div>
+      <div class="topbar-title">Admin Panel</div>
+      <div class="topbar-sub">Fasting Registrations · Dembi Dollo University</div>
+    </div>
+  </div>
+  <a href="index.html" class="back-link">🏠 Home</a>
+</div>
+
+<div class="wrap">
+
+  <!-- ── LOGIN ── -->
+  <div class="login-wrap" id="loginWrap">
+    <div class="card">
+      <div class="login-icon">✝</div>
+      <h2>Admin Sign In</h2>
+      <p>Enter the admin password to view registrations.</p>
+      <form id="loginForm">
+        <input id="pw" type="password" class="field" placeholder="Admin password"
+               autocomplete="current-password" required>
+        <div id="loginErr" class="alert error"></div>
+        <button type="submit" id="loginBtn" class="btn btn-primary btn-full" style="margin-top:.85rem;">
+          Unlock Dashboard
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── DASHBOARD ── -->
+  <div id="panel" style="display:none;">
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Group A — Full Fast</div>
+        <div class="stat-val" id="ca">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Group B — Meat‑free</div>
+        <div class="stat-val" id="cb">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total</div>
+        <div class="stat-val" id="ct">0</div>
+      </div>
+    </div>
+
+    <!-- Filter + actions -->
+    <div class="filter-bar">
+      <input id="q" class="field" placeholder="Search name, ID, department…" type="search">
+      <select id="g" class="field">
+        <option value="">All groups</option>
+        <option value="A">Group A</option>
+        <option value="B">Group B</option>
+      </select>
+      <button id="csvBtn" class="btn btn-gold">⬇ CSV</button>
+      <button id="lockBtn" class="btn btn-ghost">🔒 Lock</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-outer">
+      <table id="t">
+        <thead><tr id="thead"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- Change password -->
+    <div class="card" style="margin-top:1.25rem;">
+      <details>
+        <summary>🔑 Change Admin Password</summary>
+        <form id="chpw" class="chpw-form">
+          <input id="np1" type="password" class="field"
+                 placeholder="New password (min 12 chars)" minlength="12" required
+                 autocomplete="new-password">
+          <input id="np2" type="password" class="field"
+                 placeholder="Repeat new password" minlength="12" required
+                 autocomplete="new-password">
+          <button type="submit" id="chpwBtn" class="btn btn-primary">Save Password</button>
+          <div id="cpErr" class="alert error" style="width:100%;margin-top:0;"></div>
+          <div id="cpOk"  class="alert success" style="width:100%;margin-top:0;">✓ Password updated successfully.</div>
+        </form>
+      </details>
+    </div>
+
+  </div><!-- /panel -->
+</div><!-- /wrap -->
+
+<script>
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbxw8sbZFwx8R3CcazGsGqpQKkmbDLngj9PxKfoMLoUhSw5k9trIdyYX8o4bJxqMW2rg/exec";
+const $ = s => document.querySelector(s);
+let head = [], rows = [], adminPw = "";
+
+/* ── LOGIN ── */
+$("#loginForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const err = $("#loginErr"); err.classList.remove("show");
+  const btn = $("#loginBtn"); btn.disabled = true; btn.textContent = "Checking…";
+  try {
+    const r = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: "list", password: $("#pw").value })
+    });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error);
+    adminPw = $("#pw").value;
+    head = j.head; rows = j.rows;
+    $("#pw").value = "";
+    $("#loginWrap").style.display = "none";
+    $("#panel").style.display = "block";
+    draw();
+  } catch (x) {
+    err.textContent = x.message === "auth"
+      ? "Wrong password. Please try again."
+      : "Could not connect. Check your internet and the script URL.";
+    err.classList.add("show");
+  }
+  btn.disabled = false; btn.textContent = "Unlock Dashboard";
+});
+
+/* ── FILTER ── */
+function view() {
+  const q = $("#q").value.trim().toLowerCase(), g = $("#g").value;
+  return rows.filter(r => (!g || r[6] === g) && (!q || r.join(" ").toLowerCase().includes(q)));
+}
+
+/* ── DRAW TABLE ── */
+function draw() {
+  $("#ca").textContent = rows.filter(r => r[6] === "A").length;
+  $("#cb").textContent = rows.filter(r => r[6] === "B").length;
+  $("#ct").textContent = rows.length;
+
+  // header
+  const th = $("#thead"); th.innerHTML = "";
+  head.forEach(h => {
+    const c = document.createElement("th");
+    c.textContent = h; th.appendChild(c);
+  });
+  const act = document.createElement("th"); act.textContent = "Action"; th.appendChild(act);
+
+  // body
+  const tb = $("#tbody"); tb.innerHTML = "";
+  const v = view();
+  if (!v.length) {
+    const tr = tb.insertRow();
+    tr.className = "empty-row";
+    const td = tr.insertCell();
+    td.colSpan = head.length + 1;
+    td.textContent = rows.length ? "No results match your search." : "No registrations yet.";
+    return;
+  }
+  v.forEach(r => {
+    const tr = tb.insertRow();
+    r.forEach((val, i) => {
+      const td = tr.insertCell();
+      td.className = ""; 
+      if (i === 0) {
+        td.textContent = new Date(val).toLocaleString();
+      } else if (i === 6) {
+        // group badge
+        const b = document.createElement("span");
+        b.className = "badge " + (val === "A" ? "badge-a" : "badge-b");
+        b.textContent = "Group " + val;
+        td.appendChild(b);
+      } else if (i === 8) {
+        // language badge
+        const b = document.createElement("span");
+        b.className = "badge " + (val === "am" ? "badge-am" : "badge-ao");
+        b.textContent = val === "am" ? "አማርኛ" : val === "ao" ? "Afaan O." : (val === "om" ? "Afaan O." : val);
+        td.appendChild(b);
+      } else {
+        td.textContent = val;
+      }
+    });
+    const td = tr.insertCell();
+    const btn = document.createElement("button");
+    btn.textContent = "Delete"; btn.className = "del-btn";
+    btn.onclick = () => del(r[1]);
+    td.appendChild(btn);
+  });
+}
+
+/* ── DELETE ── */
+async function del(id) {
+  if (!confirm("Delete the registration of " + id + "?\nThis cannot be undone.")) return;
+  try {
+    const r = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: "delete", password: adminPw, studentId: id })
+    });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error);
+    rows = rows.filter(x => x[1] !== id); draw();
+  } catch (x) { alert("Could not delete. Please try again."); }
+}
+
+$("#q").oninput = draw;
+$("#g").onchange = draw;
+
+/* ── LOCK ── */
+$("#lockBtn").onclick = () => {
+  rows = []; head = []; adminPw = "";
+  $("#panel").style.display = "none";
+  $("#loginWrap").style.display = "block";
+};
+
+/* ── CSV ── */
+$("#csvBtn").onclick = () => {
+  const esc = v => {
+    v = String(v);
+    if (/^[=+\-@]/.test(v)) v = "'" + v;
+    return '"' + v.replace(/"/g, '""') + '"';
+  };
+  const body = [head, ...view()].map(r => r.map(esc).join(",")).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["\ufeff" + body], { type: "text/csv;charset=utf-8" }));
+  a.download = "fasting-registrations.csv"; a.click();
+};
+
+/* ── CHANGE PASSWORD ── */
+$("#chpw").addEventListener("submit", async e => {
+  e.preventDefault();
+  const cpErr = $("#cpErr"), cpOk = $("#cpOk");
+  cpErr.classList.remove("show"); cpOk.classList.remove("show");
+  const np1 = $("#np1").value, np2 = $("#np2").value;
+  if (np1 !== np2) {
+    cpErr.textContent = "Passwords do not match.";
+    cpErr.classList.add("show"); return;
+  }
+  if (np1.length < 12) {
+    cpErr.textContent = "Password must be at least 12 characters.";
+    cpErr.classList.add("show"); return;
+  }
+  const btn = $("#chpwBtn"); btn.disabled = true; btn.textContent = "Saving…";
+  try {
+    const r = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: "setPassword", password: adminPw, newPassword: np1 })
+    });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error);
+    adminPw = np1;
+    $("#np1").value = ""; $("#np2").value = "";
+    cpOk.classList.add("show");
+  } catch (x) {
+    cpErr.textContent = x.message === "auth"
+      ? "Session expired. Lock and log in again."
+      : x.message === "tooshort"
+        ? "Password too short (min 12 chars)."
+        : "Could not save. Check connection.";
+    cpErr.classList.add("show");
+  }
+  btn.disabled = false; btn.textContent = "Save Password";
+});
+</script>
+</body>
+</html>
